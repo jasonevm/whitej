@@ -1,4 +1,4 @@
-name: Aggregator
+name: Aggregator White
 on:
   schedule:
     - cron: '0 * * * *'
