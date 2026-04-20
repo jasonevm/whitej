@@ -20,8 +20,8 @@ jobs:
           wget -q https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip
           unzip -q Xray-linux-64.zip xray
           chmod +x xray && sudo mv xray /usr/local/bin/xray
-      - name: Generate configs.txt
-        run: python generate_configs.py
+      - name: Generate configs_white.txt
+        run: python generate_white.py
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
