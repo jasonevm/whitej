@@ -3,7 +3,7 @@ import requests
 import re
 import os
 
-# 1. ИСТОЧНИКИ (28 ссылок на raw-файлы с конфигами)
+# 1. SOURCES
 SOURCES = [
     "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-checked.txt",
     "https://raw.githubusercontent.com/whoahaow/rjsxrd/refs/heads/main/githubmirror/bypass/bypass-all.txt",
@@ -17,7 +17,7 @@ SOURCES = [
 for i in range(1, 21):
     SOURCES.append(f"https://raw.githubusercontent.com/AvenCores/goida-vpn-configs/refs/heads/main/githubmirror/{i}.txt")
 
-# 2. БЕЛЫЙ СПИСОК ДОМЕНОВ (только sni из этого списка пропускаем)
+# 2. WHITELIST DOMAINS
 WHITELIST_DOMAINS = [
     'gosuslugi.ru', 'mos.ru', 'nalog.ru', 'kremlin.ru', 'government.ru',
     'sberbank.ru', 'tbank.ru', 'alfabank.ru', 'vtb.ru', 'vk.com', 'ok.ru',
@@ -25,7 +25,7 @@ WHITELIST_DOMAINS = [
     'avito.ru', 'rbc.ru', 'tass.ru', '2gis.ru', 'rzd.ru', 'hh.ru'
 ]
 
-# 3. ФУНКЦИЯ: определяет флаг страны из текста
+# 3. COUNTRY FLAG
 def extract_flag_and_country(text):
     if '🇺🇸' in text: return {'flag': '🇺🇸', 'country': 'США'}
     if '🇬🇧' in text: return {'flag': '🇬🇧', 'country': 'Великобритания'}
@@ -37,7 +37,7 @@ def extract_flag_and_country(text):
     if '🇰🇿' in text: return {'flag': '🇰🇿', 'country': 'Казахстан'}
     return {'flag': '🌐', 'country': 'Anycast'}
 
-# 4. ФУНКЦИЯ: извлекает sni из строки конфига
+# 4. EXTRACT SNI
 def extract_sni(url_part, comment):
     sni = ''
     match = re.search(r'[?&]sni=([^&]+)', url_part + '#' + comment)
@@ -45,13 +45,13 @@ def extract_sni(url_part, comment):
         sni = requests.utils.unquote(match.group(1))
     return sni or 'sni отсутствует'
 
-# 5. ФУНКЦИЯ: проверяет, есть ли sni в белом списке
+# 5. CHECK SNI IN WHITELIST
 def is_whitelisted_sni(sni):
     if not sni: return False
     lower = sni.lower()
     return any(domain in lower or lower.endswith('.' + domain) for domain in WHITELIST_DOMAINS)
 
-# 6. ФУНКЦИЯ: парсит строку, возвращает { url, newName } или null
+# 6. FUNCTION: parse line, return { url, newName } or null
 def parse_config_line(line):
     line = line.strip()
     if not line: return None
@@ -71,7 +71,7 @@ def parse_config_line(line):
                           
     return {'url': url_part, 'newName': f"{flag_country['flag']} {flag_country['country']} | sni = {sni} | от катлер"}
 
-# 7. ФУНКЦИЯ: скачивает и парсит один источник
+# 7. FUNCTION: download and parse one sourse
 def fetch_source(url):
     try:
         response = requests.get(url, timeout=10)
@@ -84,7 +84,7 @@ def fetch_source(url):
         print(f"Error fetching {url}: {e}")
         return []
 
-# 8. ГЛАВНАЯ ФУНКЦИЯ: сбор, фильтрация, сохранение
+# 8. MAIN FUNCTION: collection, filtration, storage
 def main():
     LIMIT = 500 # Default limit, can be made configurable if needed
     
@@ -100,19 +100,7 @@ def main():
                 all_configs.append(cfg)
                 if len(all_configs) >= LIMIT: break
 
-    # In a GitHub Action, we don't have Google Drive for versioning. 
-    # We'll just generate the file and let Git handle the version history.
-    # For a simple version, we can use a timestamp or a simple counter if needed.
-    # For now, let's omit the explicit version number in the header for simplicity
-    # or use a fixed one.
     
-    # The original script uses a version from Google Drive. 
-    # For GitHub Actions, we can use the run ID or a simple incrementing number 
-    # stored in the repo itself, or just a date.
-    # Let's use a simple date for now, or a placeholder.
-    
-    # Placeholder for version. In a real GitHub Action, you might pass the run ID or a date.
-    # For now, let's use a fixed placeholder or generate a simple date.
     import datetime
     current_version = datetime.datetime.now().strftime("%Y%m%d.%H%M")
 
