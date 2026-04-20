@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-WhiteJ Config Aggregator v2
+Config Aggregator v2
 Collect → Parse → Dedup → TCP-test → Score → Export
 """
 
@@ -123,7 +123,7 @@ logging.basicConfig(
     format='%(asctime)s  %(levelname)-7s %(message)s',
     datefmt='%H:%M:%S',
 )
-log = logging.getLogger('whitej')
+log = logging.getLogger('Aggregator')
 
 # ── DATA MODEL ────────────────────────────────────────────────────────────────
 
@@ -397,10 +397,10 @@ async def main() -> None:
     # ── 5. Build output ───────────────────────────────────────────────────────
     ts = time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())
     header = [
-        '#profile-title: WhiteJ 100',
+        '#profile-title: Aggregator 100',
         '#profile-update-interval: 1',
-        f'#announce: ⚡️ WhiteJ {len(final)} configs | {ts} ⚡️',
-        '#profile-web-page-url: https://github.com/jasonevm/whitej',
+        f'#announce: ⚡️ Aggregator {len(final)} configs | {ts} ⚡️',
+        '#profile-web-page-url: https://github.com/jasonevm/aggregator',
         '',
     ]
 
