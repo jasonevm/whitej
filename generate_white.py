@@ -473,7 +473,7 @@ async def main() -> None:
     ]
     for i, cfg in enumerate(final):
         lines.append(f'{cfg.raw}#{cfg.label(i)}')
-    with open('configs.txt', 'w', encoding='utf-8') as f:
+    with open('configs_white.txt', 'w', encoding='utf-8') as f:
         f.write('\n'.join(lines) + '\n')
 
     by_proto = {}; by_sec = {}; by_ctry = {}; speeds = []
@@ -484,7 +484,7 @@ async def main() -> None:
         if c.speed_mbps: speeds.append(c.speed_mbps)
 
     log.info('─' * 54)
-    log.info('configs.txt  (%d configs)', len(final))
+    log.info('configs_white.txt  (%d configs)', len(final))
     log.info('Protocol : %s', by_proto)
     log.info('Security : %s', by_sec)
     log.info('Countries: %s', sorted(by_ctry.items(), key=lambda x: -x[1])[:5])
