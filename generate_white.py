@@ -22,6 +22,7 @@ import json
 import base64
 import time
 import logging
+import socket
 from dataclasses import dataclass
 from typing import Optional
 from urllib.parse import urlparse, parse_qs
